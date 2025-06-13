@@ -1,34 +1,34 @@
-# Orientation
+# 오리엔테이션
 
 <div class="video-wrapper">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/G3CV-FcV-rc?si=nyLvwhrSB2m1NPc5&amp;list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 /// caption
-:fontawesome-brands-youtube:{ .youtube } See [the whole playlist](https://www.youtube.com/playlist?list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik) on the Nextflow YouTube channel.
+:fontawesome-brands-youtube:{ .youtube } [Nextflow YouTube 채널](https://www.youtube.com/playlist?list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik)에서 전체 재생목록을 확인할 수 있습니다.
 
-:green_book: The video transcript is available [here](./transcripts/00_orientation.md).
+:green_book: 영상 자막은 [여기](./transcripts/00_orientation.md)에서 확인할 수 있습니다.
 ///
 
 !!! tip
 
-    The YouTube videos have some super powers!
+    YouTube 동영상에는 몇 가지 유용한 기능이 있습니다!
 
-    - :fontawesome-solid-closed-captioning: High quality (manually curated) captions / subtitles. Switch them on with the :material-subtitles: icon
-    - :material-bookmark: Video chapters in the timeline that correspond to page headings.
+    - :fontawesome-solid-closed-captioning: 고품질(수동으로 관리된) 자막이 제공됩니다. :material-subtitles: 아이콘을 클릭해 자막을 켤 수 있습니다.
+    - :material-bookmark: 동영상 타임라인에 페이지 제목과 일치하는 챕터가 표시됩니다.
 
 ## GitHub Codespaces
 
-The GitHub Codespaces environment contains all the software, code and data necessary to work through this training course, so you don't need to install anything yourself.
-However, you do need a (free) GitHub account to log in, and you should take a few minutes to familiarize yourself with the interface.
+GitHub Codespaces 환경에는 이 교육 과정을 진행하는 데 필요한 모든 소프트웨어, 코드, 데이터가 포함되어 있으므로 별도의 설치가 필요하지 않습니다.
+단, 로그인하려면 (무료) GitHub 계정이 필요하며, 인터페이스에 익숙해지는 데 몇 분 정도 시간을 투자하는 것이 좋습니다.
 
-If you have not yet done so, please go through the [Environment Setup](../../envsetup/) mini-course before going any further.
+아직 환경 설정을 완료하지 않았다면, 계속 진행하기 전에 [환경 설정](../../envsetup/) 미니 코스를 먼저 완료해 주세요.
 
-## Working directory
+## 작업 디렉토리
 
-Throughout this training course, we'll be working in the `hello-nextflow/` directory.
+이 교육 과정 전반에 걸쳐 `hello-nextflow/` 디렉토리에서 작업하게 됩니다.
 
-Change directory now by running this command in the terminal:
+터미널에서 다음 명령어를 실행하여 지금 디렉토리를 변경하세요:
 
 ```bash
 cd hello-nextflow/
@@ -36,30 +36,30 @@ cd hello-nextflow/
 
 !!!tip
 
-    If for whatever reason you move out of this directory, you can always use the full path to return to it, assuming you're running this within the Github Codespaces training environment:
+    혹시 디렉터리에서 벗어나게 되더라도, GitHub Codespaces 교육 환경 내에서 작업 중이라면 전체 경로를 입력하여 언제든지 다시 이 디렉터리로 돌아올 수 있습니다.
 
     ```bash
     cd /workspaces/training/hello-nextflow
     ```
 
-Now let's have a look at the contents of this directory.
+이제 이 디렉토리의 내용을 살펴보겠습니다.
 
-## Materials provided
+## 제공된 자료
 
-You can explore the contents of this directory by using the file explorer on the left-hand side of the training workspace.
-Alternatively, you can use the `tree` command.
+교육 작업공간 왼쪽에 있는 파일 탐색기를 사용하여 이 디렉토리의 내용을 탐색할 수 있습니다.
+또는 `tree` 명령어를 사용할 수 있습니다.
 
-Throughout the course, we use the output of `tree` to represent directory structure and contents in a readable form, sometimes with minor modifications for clarity.
+이 교육 과정에서는 디렉터리 구조와 파일 내용을 보다 쉽게 전달하기 위해 `tree` 명령어의 출력 결과를 사용하며, 때때로 설명을 명확히 하기 위해 일부 내용을 간단히 수정할 수 있습니다.
 
-Here we generate a table of contents to the second level down:
+여기서는 두 번째 수준까지의 목차를 생성합니다:
 
 ```bash
 tree . -L 2
 ```
 
-If you run this inside `hello-nextflow`, you should see the following output:
+이 명령어를 `hello-nextflow` 내에서 실행하면 다음과 같은 출력을 볼 수 있습니다:
 
-```console title="Directory contents"
+```console title="디렉터리의 구성 항목"
 .
 ├── greetings.csv
 ├── hello-channels.nf
@@ -81,20 +81,19 @@ If you run this inside `hello-nextflow`, you should see the following output:
 7 directories, 9 files
 ```
 
-**Here's a summary of what you should know to get started:**
+**시작 전 꼭 알아야 할 핵심 요약:**
 
-- **The `.nf` files** are workflow scripts that are named based on what part of the course they're used in.
+- **`.nf` 파일**은 과정의 각 단계에서 사용하는 워크플로우 스크립트이며, 해당 단계에 맞춰 이름이 지정되어 있습니다.
 
-- **The file `nextflow.config`** is a configuration file that sets minimal environment properties.
-  You can ignore it for now.
+- **`nextflow.config` 파일**은 최소한의 환경 설정을 정의하는 구성 파일입니다. 지금은 신경 쓰지 않으셔도 됩니다.
 
-- **The file `greetings.csv`** contains input data we'll use in most of the course. It is described in Part 1, when we introduce it for the first time.
+- **`greetings.csv` 파일**은 과정 대부분에서 사용할 입력 데이터를 포함하고 있습니다. 이는 첫 번째로 소개되는 1부에서 설명됩니다.
 
-- **The file `test-params.json`** is a file we'll use in Part 6. You can ignore it for now.
+- **`test-params.json` 파일**은 6부에서 사용할 파일입니다. 지금은 신경 쓰지 않으셔도 됩니다.
 
-- **The `solutions` directory** contains the completed workflow scripts that result from each step of the course.
-  They are intended to be used as a reference to check your work and troubleshoot any issues.
-  The name and number in the filename correspond to the step of the relevant part of the course.
-  For example, the file `hello-world-4.nf` is the expected result of completing steps 1 through 4 of Part 1: Hello World.
+- **`solutions` 디렉토리**는 각 단계에서 완성된 워크플로우 스크립트가 들어 있습니다.
+  이는 작업 결과를 확인하거나 문제를 해결할 때 참고용으로 활용할 수 있습니다.
+  파일 이름과 번호는 해당하는 과정의 단계와 연결되어 있습니다.
+  예를 들어, `hello-world-4.nf` 파일은 1부: Hello World의 1단계부터 4단계까지 완료했을 때의 예상 결과입니다.
 
-**Now, to begin the course, click on the arrow in the bottom right corner of this page.**
+**이제, 과정을 시작하려면 이 페이지 오른쪽 하단의 화살표를 클릭하세요.**
