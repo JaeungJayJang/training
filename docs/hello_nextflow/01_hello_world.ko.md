@@ -1,62 +1,63 @@
-# Part 1: Hello World
+# 1부: Hello World
 
 <div class="video-wrapper">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/8X2hHI-9vms?si=F0t9LFYLjAWoyRXj&amp;list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 /// caption
-:fontawesome-brands-youtube:{ .youtube } See [the whole playlist](https://www.youtube.com/playlist?list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik) on the Nextflow YouTube channel.
+:fontawesome-brands-youtube:{ .youtube } [Nextflow YouTube 채널](https://www.youtube.com/playlist?list=PLPZ8WHdZGxmXiHf8B26oB_fTfoKQdhlik)에서 전체 재생목록을 확인할 수 있습니다.
 
-:green_book: The video transcript is available [here](./transcripts/01_hello_world.md).
+:green_book: 영상 자막은 [여기](./transcripts/01_hello_world.md)에서 확인할 수 있습니다.
 ///
 
-In this first part of the Hello Nextflow training course, we ease into the topic with a very basic domain-agnostic Hello World example, which we'll progressively build up to demonstrate the usage of foundational Nextflow logic and components.
+Hello Nextflow 교육 과정의 첫 번째 파트에서는, 분야에 구애받지 않는 아주 기본적인 Hello World 예제를 통해 주제를 가볍게 시작합니다. 이 예제를 점차 확장해 나가며 Nextflow의 기본적인 로직과 구성 요소들의 사용법을 소개할 예정입니다.
+
 
 !!! note
 
-    A "Hello World!" is a minimalist example that is meant to demonstrate the basic syntax and structure of a programming language or software framework. The example typically consists of printing the phrase "Hello, World!" to the output device, such as the console or terminal, or writing it to a file.
+    "Hello World!"는 프로그래밍 언어나 소프트웨어 프레임워크의 기본 문법과 구조를 보여주기 위한 최소한의 예제입니다. 보통 'Hello, World!'라는 문구를 콘솔이나 터미널에 출력하거나 파일에 기록하는 방식으로 동작합니다.
 
 ---
 
-## 0. Warmup: Run Hello World directly
+## 0. 준비단계 Hello World 직접 실행하기
 
-Let's demonstrate this with a simple command that we run directly in the terminal, to show what it does before we wrap it in Nextflow.
+Nextflow로 감싸기 전에, 터미널에서 직접 간단한 명령어를 실행해 동작을 확인해봅니다.
 
 !!! tip
 
-    Remember that you should now be inside the `hello-nextflow/` directory as described in the Orientation.
+    오리엔테이션에서 안내한 대로, 현재 `hello-nextflow/` 디렉터리 안에 있어야 합니다.
 
-### 0.1. Make the terminal say hello
+### 0.1. 터미널이 인사하도록 만들어 보기
 
 ```bash
 echo 'Hello World!'
 ```
 
-This outputs the text 'Hello World' to the terminal.
+이 명령어는 'Hello World'라는 텍스트를 터미널에 출력합니다.
 
 ```console title="Output"
 Hello World!
 ```
 
-### 0.2. Now make it write the text output to a file
+### 0.2. 이번에는 텍스트를 파일로 저장하기
 
 ```bash
 echo 'Hello World!' > output.txt
 ```
 
-This does not output anything to the terminal.
+이 명령어는 터미널에는 아무런 출력을 하지 않습니다.
 
 ```console title="Output"
 
 ```
 
-### 0.3. Show the file contents
+### 0.3. 파일 내용 확인하기
 
 ```bash
 cat output.txt
 ```
 
-The text 'Hello World' is now in the output file we specified.
+지정한 출력 파일에 'Hello World'라는 텍스트가 저장되었습니다.
 
 ```console title="output.txt" linenums="1"
 Hello World!
@@ -64,36 +65,36 @@ Hello World!
 
 !!! tip
 
-    In the training environment, you can also find the output file in the file explorer, and view its contents by clicking on it. Alternatively, you can use the `code` command to open the file for viewing.
+    교육 환경에서는 파일 탐색기에서 출력 파일을 찾아보고, 클릭하여 내용을 확인할 수 있습니다. 또는 `code` 명령어를 사용하여 파일을 열어볼 수도 있습니다.
 
     ```bash
     code output.txt
     ```
 
-### Takeaway
+### 요약
 
-You now know how to run a simple command in the terminal that outputs some text, and optionally, how to make it write the output to a file.
+이제 텍스트를 출력하는 간단한 명령어를 터미널에서 실행하는 방법과, 선택적으로 그 출력을 파일에 저장하는 방법을 알게 되었습니다.
 
-### What's next?
+### 다음 단계는?
 
-Find out what that would look like written as a Nextflow workflow.
+Nextflow 워크플로우로 작성했을 때의 모습을 알아봅시다.
 
 ---
 
-## 1. Examine the Hello World workflow starter script
+## 1. Hello World 워크플로우 시작 스크립트 살펴보기
 
-As mentioned in the orientation, we provide you with a fully functional if minimalist workflow script named `hello-world.nf` that does the same thing as before (write out 'Hello World!') but with Nextflow.
+오리엔테이션에서 언급했듯이, 저희는 여러분에게 `hello-world.nf`라는 최소한의 구조를 갖춘 완전한 기능의 워크플로우 스크립트를 제공합니다. 이 스크립트는 앞에서 했던 것처럼 'Hello World!'를 출력하지만, 이번에는 Nextflow를 사용합니다.
 
-To get you started, we'll first open up the workflow script so you can get a sense of how it's structured.
+시작하기에 앞서, 워크플로우 스크립트를 먼저 열어보면서 그 구조가 어떻게 되어 있는지 살펴보겠습니다.
 
-### 1.1. Examine the overall code structure
+### 1.1. 전체 코드 구조 살펴보기
 
-Let's open the `hello-world.nf` script in the editor pane.
+편집기 창에서 `hello-world.nf` 스크립트를 열어봅시다.
 
 !!! note
 
-    The file is in the `hello-nextflow` directory, which should be your current working directory.
-    You can either click on the file in the file explorer, or type `ls` in the terminal and Cmd+Click (MacOS) or Ctrl+Click (PC) on the file to open it.
+    파일은 `hello-nextflow` 디렉터리에 있으며, 현재 작업 디렉터리여야 합니다.
+    파일 탐색기에서 파일을 클릭하거나, 터미널에서 `ls`를 입력한 후 파일을 Cmd+Click (MacOS) 또는 Ctrl+Click (PC)하여 열 수 있습니다.
 
 ```groovy title="hello-world.nf" linenums="1"
 #!/usr/bin/env nextflow
@@ -119,18 +120,18 @@ workflow {
 }
 ```
 
-As you can see, a Nextflow script involves two main types of core components: one or more **processes**, and the **workflow** itself.
-Each **process** describes what operation(s) the corresponding step in the pipeline should accomplish, while the **workflow** describes the dataflow logic that connects the various steps.
+보시다시피, Nextflow 스크립트는 주로 두 가지 유형의 핵심 구성 요소로 이루어져 있습니다: 하나 이상의 **프로세스**와 **워크플로우** 자체입니다.
+각 **프로세스**는 파이프라인의 해당 단계에서 수행해야 할 작업을 설명하고, **워크플로우**는 다양한 단계를 연결하는 데이터 흐름 논리를 설명합니다.
 
-Let's take a closer look at the **process** block first, then we'll look at the **workflow** block.
+먼저 **프로세스** 블록을 자세히 살펴보고, 그 다음에 **워크플로우** 블록을 살펴보겠습니다.
 
-### 1.2. The `process` definition
+### 1.2. `process` 정의
 
-The first block of code describes a **process**.
-The process definition starts with the keyword `process`, followed by the process name and finally the process body delimited by curly braces.
-The process body must contain a script block which specifies the command to run, which can be anything you would be able to run in a command line terminal.
+첫 번째 코드 블록은 **프로세스**를 설명합니다.
+프로세스 정의는 `process` 키워드로 시작하여, 프로세스 이름이 뒤따르고, 마지막으로 중괄호로 구분된 프로세스 본체가 옵니다.
+프로세스 본체에는 실행할 명령을 지정하는 스크립트 블록이 포함되어야 하며, 이는 커맨드 라인 터미널에서 실행할 수 있는 모든 것이 될 수 있습니다.
 
-Here we have a **process** called `sayHello` that writes its **output** to a file named `output.txt`.
+여기에는 `output.txt`라는 파일에 출력을 기록하는 **프로세스** `sayHello`가 있습니다.
 
 ```groovy title="hello-world.nf" linenums="3"
 /*
@@ -148,31 +149,32 @@ process sayHello {
 }
 ```
 
-This is a very minimal process definition that just contains an `output` definition and the `script` to execute.
+이것은 `output` 정의와 실행할 `script`만 포함된 매우 간단한 프로세스 정의입니다.
 
-The `output` definition includes the `path` qualifier, which tells Nextflow this should be handled as a path (includes both directory paths and files).
-Another common qualifier is `val`.
+
+`output` 정의에는 `path` 한정자가 포함되어 있어, Nextflow에 이 출력이 경로(디렉터리 경로 및 파일 모두 포함)로 처리되어야 함을 알립니다.
+또 다른 일반적인 한정자는 `val`입니다.
 
 !!! note
 
-    The output definition does not _determine_ what output will be created.
-    It simply _declares_ what is the expected output, so that Nextflow can look for it once execution is complete.
-    This is necessary for verifying that the command was executed successfully and for passing the output to downstream processes if needed. Output produced that doesn't match what is declared in the output block will not be passed to downstream processes.
+    출력(output) 정의는 생성될 출력을 _결정_ 하지 않습니다.
+    단지 어떤 출력이 나올 것으로 예상되는지를 _선언하는_ 역할을 하며, 실행이 완료된 후 Nextflow가 해당 출력을 찾아낼 수 있도록 도와줍니다.
+    이는 명령이 성공적으로 실행되었는지 확인하고, 필요할 경우 출력 결과를 다음 단계의 프로세스로 전달하기 위해 필요합니다. 출력 블록에 선언된 것과 일치하지 않는 방식으로 생성된 출력은 다음 단계의 프로세스로 전달되지 않습니다.
 
 !!! warning
 
-    This example is brittle because we hardcoded the output filename in two separate places (the script and the output blocks).
-    If we change one but not the other, the script will break.
-    Later, you'll learn how to use variables to avoid this problem.
+    이 예제는 출력 파일 이름을 두 개의 별도 위치(스크립트와 출력 블록)에 하드코딩했기 때문에 다소 불안정 합니다.
+    만약 한쪽만 수정하고 다른 쪽을 수정하지 않으면 스크립트가 작동하지 않게 됩니다.
+    이후에 이러한 문제를 피하기 위해 변수를 사용하는 방법을 배우게 될 것입니다.
 
-In a real-world pipeline, a process usually contains additional blocks such as directives and inputs, which we'll introduce in a little bit.
+실제 파이프라인에서는 프로세스에 추가 블록(지시문 및 입력 등)이 포함되는 경우가 많으며, 이는 곧 소개할 것입니다.
 
-### 1.3. The `workflow` definition
+### 1.3. `workflow` 정의
 
-The second block of code describes the **workflow** itself.
-The workflow definition starts with the keyword `workflow`, followed by an optional name, then the workflow body delimited by curly braces.
+두 번째 코드 블록은 **워크플로우** 자체를 설명합니다.
+워크플로우 정의는 `workflow` 키워드로 시작하여 선택적 이름이 뒤따르고, 마지막으로 중괄호로 구분된 워크플로우 본체가 옵니다.
 
-Here we have a **workflow** that consists of one call to the `sayHello` process.
+여기에는 `sayHello` 프로세스에 대한 호출이 하나만 있는 **워크플로우**가 있습니다.
 
 ```groovy title="hello-world.nf" linenums="17"
 workflow {
@@ -182,34 +184,34 @@ workflow {
 }
 ```
 
-This is a very minimal **workflow** definition.
-In a real-world pipeline, the workflow typically contains multiple calls to **processes** connected by **channels**, and the processes expect one or more variable **input(s)**.
+이는 매우 최소한의 **워크플로우** 정의입니다.
+실제 파이프라인에서는 워크플로우에 일반적으로 여러 **프로세스**에 대한 호출이 포함되며, 이들은 **채널(channels)**에 의해 연결되고 프로세스는 하나 이상의 가변 **입력(inputs)**을 기대합니다.
 
-You'll learn how to add variable inputs later in this training module; and you'll learn how to add more processes and connect them by channels in Part 3 of this course.
+가변 입력을 추가하는 방법은 나중에 이 교육 모듈에서 배우게 될 것이며, 더 많은 프로세스를 추가하고 채널로 연결하는 방법은 이 과정의 3부에서 배우게 될 것입니다.
 
-### Takeaway
+### 요약
 
-You now know how a simple Nextflow workflow is structured.
+이제 간단한 Nextflow 워크플로우가 어떻게 구성되어 있는지 알게 되었습니다.
 
-### What's next?
+### 다음 단계는?
 
-Learn to launch the workflow, monitor execution and find your outputs.
+워크플로우를 실행하고, 실행 모니터링 및 출력 결과를 찾는 방법을 배워봅시다.
 
 ---
 
-## 2. Run the workflow
+## 2. 워크플로우 실행하기
 
-Looking at code is not nearly as fun as running it, so let's try this out in practice.
+코드를 보는 것만으로는 충분히 재미있지 않으니, 이를 실제로 시도해봅시다.
 
-### 2.1. Launch the workflow and monitor execution
+### 2.1. 워크플로우 실행 및 모니터링
 
-In the terminal, run the following command:
+터미널에서 다음 명령어를 실행합니다:
 
 ```bash
 nextflow run hello-world.nf
 ```
 
-You console output should look something like this:
+콘솔 출력은 다음과 비슷하게 나타날 것입니다:
 
 ```console title="Output" linenums="1"
  N E X T F L O W   ~  version 25.04.3
@@ -220,41 +222,41 @@ executor >  local (1)
 [a3/7be2fa] sayHello | 1 of 1 ✔
 ```
 
-Congratulations, you just ran your first Nextflow workflow!
+축하합니다. 첫 번째 Nextflow 워크플로우를 실행했습니다!
 
-The most important output here is the last line (line 6):
+여기서 가장 중요한 출력은 마지막 줄(6행)입니다:
 
 ```console title="Output" linenums="6"
 [a3/7be2fa] sayHello | 1 of 1 ✔
 ```
 
-This tells us that the `sayHello` process was successfully executed once (`1 of 1 ✔`).
+이는 `sayHello` 프로세스가 한 번(`1 of 1 ✔`) 성공적으로 실행되었음을 나타냅니다.
 
-Importantly, this line also tells you where to find the output of the `sayHello` process call.
-Let's look at that now.
+중요하게도, 이 줄은 또한 `sayHello` 프로세스 호출의 출력을 찾을 위치를 알려줍니다. 이제 그것을 살펴보겠습니다.
 
-### 2.2. Find the output and logs in the `work` directory
+### 2.2. `work` 디렉터리에서 출력 및 로그 찾기
 
-When you run Nextflow for the first time in a given directory, it creates a directory called `work` where it will write all files (and any symlinks) generated in the course of execution.
+주어진 디렉터리에서 Nextflow를 처음 실행하면, 실행 과정에서 생성된 모든 파일(및 심볼릭 링크)을 기록할 `work`라는 디렉터리가 생성됩니다.
 
-Within the `work` directory, Nextflow organizes outputs and logs per process call.
-For each process call, Nextflow creates a nested subdirectory, named with a hash in order to make it unique, where it will stage all necessary inputs (using symlinks by default), write helper files, and write out logs and any outputs of the process.
+`work` 디렉터리 내에서, Nextflow는 프로세스 호출별로 출력 및 로그를 구성합니다.
+각 프로세스가 실행될 때마다, Nextflow는 고유한 해시값을 이름으로 갖는 중첩된 하위 디렉토리를 생성합니다.
+이 디렉토리에는 필요한 입력 파일들이 (기본적으로 심볼릭 링크를 사용하여) 준비되고, 보조 파일과 로그, 그리고 프로세스의 출력 결과가 저장됩니다.
 
-The path to that subdirectory is shown in truncated form in square brackets in the console output.
-Looking at what we got for the run shown above, the console log line for the sayHello process starts with `[a3/7be2fa]`. That corresponds to the following directory path: `work/a3/7be2fa7be2fad5e71e5f49998f795677fd68`
+이 하위 디렉토리의 경로는 콘솔 출력에서 대괄호로 감싸인 축약된 형태로 보여집니다.
+위에서 보여준 실행 로그를 보면, `sayHello` 프로세스의 콘솔 로그 줄은 `[a3/7be2fa]`로 시작합니다. 이는 다음과 같은 디렉터리 경로에 해당합니다: `work/a3/7be2fad5e71e5f49998f795677fd68`
 
-Let's take a look at what's in there.
+그 안에 무엇이 있는지 살펴보겠습니다.
 
 !!! tip
 
-    If you browse the contents of the task subdirectory in the VSCode file explorer, you'll see all the files right away.
-    However, the log files are set to be invisible in the terminal, so if you want to use `ls` or `tree` to view them, you'll need to set the relevant option for displaying invisible files.
+    VSCode 파일 탐색기에서 작업 하위 디렉터리의 내용을 찾아보면 모든 파일을 즉시 볼 수 있습니다.
+    그러나 터미널에서는 로그 파일이 보이지 않도록 설정되어 있으므로, 이를 보려면 관련 옵션을 설정해야 합니다.
 
     ```bash
     tree -a work
     ```
 
-You should see something like this, though the exact subdirectory names will be different on your system:
+아래와 비슷한 형태가 출력될 것입니다. 다만, 실제 하위 디렉토리 이름은 사용자의 시스템에 따라 달라질 수 있습니다.
 
 ```console title="Directory contents"
 work
@@ -270,34 +272,34 @@ work
         └── output.txt
 ```
 
-These are the helper and log files:
+이들은 도우미 및 로그 파일입니다:
 
-- **`.command.begin`**: Metadata related to the beginning of the execution of the process call
-- **`.command.err`**: Error messages (`stderr`) emitted by the process call
-- **`.command.log`**: Complete log output emitted by the process call
-- **`.command.out`**: Regular output (`stdout`) by the process call
-- **`.command.run`**: Full script run by Nextflow to execute the process call
-- **`.command.sh`**: The command that was actually run by the process call
-- **`.exitcode`**: The exit code resulting from the command
+- **`.command.begin`**: 프로세스 호출의 실행 시작과 관련된 메타데이터
+- **`.command.err`**: 프로세스 호출에 의해 생성된 오류 메시지(`stderr`)
+- **`.command.log`**: 프로세스 호출에 의해 생성된 전체 로그 출력
+- **`.command.out`**: 프로세스 호출에 의해 생성된 일반 출력(`stdout`)
+- **`.command.run`**: 프로세스 호출을 실행하기 위해 Nextflow에 의해 실행된 전체 스크립트
+- **`.command.sh`**: 프로세스 호출에 의해 실제로 실행된 명령
+- **`.exitcode`**: 명령에서 생성된 종료 코드
 
-The `.command.sh` file is especially useful because it tells you what command Nextflow actually executed.
-In this case it's very straightforward, but later in the course you'll see commands that involve some interpolation of variables.
-When you're dealing with that, you need to be able to check exactly what was run, especially when troubleshooting an issue.
+특히 `.command.sh` 파일이 유용한데, 이는 Nextflow가 실제로 어떤 명령을 실행했는지를 알려줍니다.
+이번 예제에서는 매우 단순하지만, 이후 과정에서는 변수 보간(interpolation)이 포함된 명령어들도 다루게 될 것입니다.
+그럴 때는 특히 문제가 발생했을 때 어떤 명령이 실행되었는지 정확히 확인할 수 있어야 합니다.
 
-The actual output of the `sayHello` process is `output.txt`.
-Open it and you will find the `Hello World!` greeting, which was the expected result of our minimalist workflow.
+`sayHello` 프로세스의 출력 결과는 `output.txt` 파일입니다.
+이 파일을 열어보면, 최소한의 워크플로우에서 기대했던 결과인 Hello World! 인사말이 들어 있는 것을 확인할 수 있습니다.
 
 ```console title="output.txt" linenums="1"
 Hello World!
 ```
 
-### Takeaway
+### 요약
 
-You know how to decipher a simple Nextflow script, run it and find the output and relevant log files in the work directory.
+간단한 Nextflow 스크립트를 해독하고, 실행하며, 출력 및 관련 로그 파일을 작업 디렉터리에서 찾는 방법을 알게 되었습니다.
 
-### What's next?
+### 다음 단계는?
 
-Learn how to manage your workflow executions conveniently.
+워크플로우 실행을 편리하게 관리하는 방법을 배워봅시다.
 
 ---
 
