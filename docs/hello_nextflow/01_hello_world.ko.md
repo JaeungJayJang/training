@@ -125,7 +125,7 @@ workflow {
 
 먼저 **프로세스** 블록을 자세히 살펴보고, 그 다음에 **워크플로우** 블록을 살펴보겠습니다.
 
-### 1.2. `process` 정의
+### 1.2. `process(프로세스)` 정의
 
 첫 번째 코드 블록은 **프로세스**를 설명합니다.
 프로세스 정의는 `process` 키워드로 시작하여, 프로세스 이름이 뒤따르고, 마지막으로 중괄호로 구분된 프로세스 본체가 옵니다.
@@ -169,7 +169,7 @@ process sayHello {
 
 실제 파이프라인에서는 프로세스에 추가 블록(지시문 및 입력 등)이 포함되는 경우가 많으며, 이는 곧 소개할 것입니다.
 
-### 1.3. `workflow` 정의
+### 1.3. `workflow(워크플로우)` 정의
 
 두 번째 코드 블록은 **워크플로우** 자체를 설명합니다.
 워크플로우 정의는 `workflow` 키워드로 시작하여 선택적 이름이 뒤따르고, 마지막으로 중괄호로 구분된 워크플로우 본체가 옵니다.
@@ -303,28 +303,26 @@ Hello World!
 
 ---
 
-## 3. Manage workflow executions
+## 3. 워크플로우 실행 관리하기
 
-Knowing how to launch workflows and retrieve outputs is great, but you'll quickly find there are a few other aspects of workflow management that will make your life easier, especially if you're developing your own workflows.
+워크플로우를 실행하고 출력 결과를 확인하는 것도 중요하지만, 특히 직접 워크플로우를 개발하는 경우에는 워크플로우 관리를 더 쉽게 만들어주는 몇 가지 핵심 요소들을 곧 접하게 될 것입니다.
 
-Here we show you how to use the `publishDir` directive to store in an output folder all the main results from your pipeline run, the `resume` feature for when you need to re-launch the same workflow, and how to delete older work directories with `nextflow clean`.
+이 섹션에서는 파이프라인의 주요 결과를 출력 폴더에 저장하는 `publishDir` 지시어의 사용법, 동일한 워크플로우를 다시 실행할 때 활용할 수 있는 `resume` 기능, 그리고 더 이상 필요 없는 작업 디렉터리를 정리하는 `nextflow clean` 명령어에 대해 알아봅니다.
 
-### 3.1. Publish outputs
+### 3.1. 출력 결과 폴더에 저장하기
 
-As you have just learned, the output produced by our pipeline is buried in a working directory several layers deep.
-This is done on purpose; Nextflow is in control of this directory and we are not supposed to interact with it.
+앞서 배운 것처럼, 파이프라인의 출력 파일은 여러 단계의 하위 작업 디렉터리 안에 저장됩니다. 이는 Nextflow가 해당 디렉터리를 완전히 제어하기 위한 설계이며, 사용자가 직접 그 내부를 다루는 것은 권장되지 않습니다.
 
-However, that makes it inconvenient to retrieve outputs that we care about.
+그러나 이로 인해 우리가 필요한 출력 결과를 확인하거나 추출하는 과정이 다소 번거로울 수 있습니다.
 
-Fortunately, Nextflow provides a way to manage this more conveniently, called the `publishDir` directive, which acts at the process level.
-This directive tells Nextflow to publish the output(s) of the process to a designated output directory. By default, the outputs are published as symbolic links from the `work` directory.
-It allows us to retrieve the desired output file without having to dig down into the work directory.
+다행히도 Nextflow는 이 문제를 더 편리하게 관리할 수 있는 방법을 제공합니다. 바로 프로세스 단위에서 동작하는 publishDir 지시어입니다.이 지시어는 Nextflow에게 해당 프로세스의 출력 결과를 지정된 출력 디렉터리에 저장하라고 지시합니다. 기본적으로 출력 파일은 `work` 디렉터리로부터 심볼릭 링크 형태로 출력 디렉터리에 연결됩니다.
+이 기능을 사용하면 work 디렉터리의 복잡한 구조를 탐색하지 않고도 필요한 출력 파일에 쉽게 접근할 수 있습니다.
 
-#### 3.1.1. Add a `publishDir` directive to the `sayHello` process
+#### 3.1.1. `sayHello` 프로세스에 `publishDir` 지시문 추가하기
 
-In the workflow script file `hello-world.nf`, make the following code modification:
+`hello-world.nf` 파일에 아래와 같이 코드를 추가합니다:
 
-=== "After"
+=== "변경 후"
 
     ```groovy title="hello-world.nf" linenums="6" hl_lines="3"
     process sayHello {
@@ -335,7 +333,7 @@ In the workflow script file `hello-world.nf`, make the following code modificati
             path 'output.txt'
     ```
 
-=== "Before"
+=== "변경 전"
 
     ```groovy title="hello-world.nf" linenums="6"
     process sayHello {
@@ -344,15 +342,15 @@ In the workflow script file `hello-world.nf`, make the following code modificati
             path 'output.txt'
     ```
 
-#### 3.1.2. Run the workflow again
+#### 3.1.2. 워크플로우 다시 실행하기
 
-Now run the modified workflow script:
+이제 수정한 워크플로우를 다시 실행해 봅니다:
 
 ```bash
 nextflow run hello-world.nf
 ```
 
-The log output should look very familiar:
+실행 로그는 이전과 비슷하게 나타납니다.
 
 ```console title="Output" linenums="1"
  N E X T F L O W   ~  version 25.04.3
@@ -363,19 +361,19 @@ executor >  local (1)
 [62/49a1f8] sayHello | 1 of 1 ✔
 ```
 
-This time, Nextflow has created a new directory called `results/`.
-Our `output.txt` file is in this directory.
-If you check the contents it should match the output in the work subdirectory.
-This is how we publish results files outside of the working directories conveniently.
+이번에는 Nextflow가 results/라는 새 디렉터리를 생성했습니다.
+output.txt 파일은 이 디렉터리 안에 위치합니다.
+이 파일의 내용을 확인해 보면 work 하위 디렉터리에 있는 출력 결과와 일치함을 알 수 있습니다.
+이와 같은 방식으로 작업 디렉터리 외부에 결과 파일을 편리하게 게시할 수 있습니다.
 
-When you're dealing with very large files that you don't need to retain for long, you may prefer to set the `publishDir` directive to make a symbolic link to the file instead of copying it.
-However, if you delete the work directory as part of a cleanup operation, you will lose access to the file, so always make sure you have actual copies of everything you care about before deleting anything.
+보관 기간이 짧은 대용량 파일을 처리할 때는, `publishDir` 지시어를 사용하여 파일을 복사하는 대신 심볼릭 링크를 생성하도록 설정하는 것이 더 효율적일 수 있습니다.
+그러나 정리 작업의 일환으로 work 디렉터리를 삭제하면 해당 파일에 접근할 수 없게 되므로, 중요한 파일은 삭제 전에 반드시 실제 복사본을 확보해 두시기 바랍니다.
 
 !!! note
 
-    A newer syntax option documented [here](https://www.nextflow.io/docs/latest/workflow.html#publishing-outputs) has been proposed to make it possible to declare and publish workflow-level outputs.
-    This will eventually make using `publishDir` at the process level redundant for completed pipelines.
-    However, we expect that `publishDir` will still remain very useful during pipeline development.
+    [Nextflow 공식 문서](https://www.nextflow.io/docs/latest/workflow.html#publishing-outputs)에서는 워크플로우 전체 출력에 대한 새로운 선언 방식도 소개하고 있습니다.
+    이 기능이 도입되면, 완료된 파이프라인에서는 프로세스 수준에서 `publishDir`를 사용하는 것이 점차 불필요해질 것으로 예상됩니다.
+    다만, 파이프라인 개발 과정에서는 여전히 publishDir 지시어가 매우 유용하게 사용될 것으로 보입니다.
 
 ### 3.2. Re-launch a workflow with `-resume`
 
