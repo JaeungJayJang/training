@@ -373,26 +373,25 @@ output.txt 파일은 이 디렉터리 안에 위치합니다.
     이 기능이 도입되면, 완료된 파이프라인에서는 프로세스 수준에서 `publishDir`를 사용하는 것이 점차 불필요해질 것으로 예상됩니다.
     다만, 파이프라인 개발 과정에서는 여전히 publishDir 지시어가 매우 유용하게 사용될 것으로 보입니다.
 
-### 3.2. Re-launch a workflow with `-resume`
+### 3.2. `-resume` 옵션으로 워크플로우 다시 실행하기
 
-Sometimes, you're going to want to re-run a pipeline that you've already launched previously without redoing any steps that already completed successfully.
+ 워크플로우를 다시 실행할 때, 이미 성공적으로 완료된 단계는 다시 실행하지 않고 건너뛰고 싶을 때가 있습니다.
 
-Nextflow has an option called `-resume` that allows you to do this.
-Specifically, in this mode, any processes that have already been run with the exact same code, settings and inputs will be skipped.
-This means Nextflow will only run processes that you've added or modified since the last run, or to which you're providing new settings or inputs.
+ Nextflow의 `-resume` 옵션을 사용하면, 이전 실행에서 동일한 코드, 설정, 입력값으로 이미 완료된 프로세스는 자동으로 건너뜁니다.
+ 즉, 마지막 실행 이후에 새로 추가하거나 수정한 프로세스, 혹은 입력값이 변경된 부분만 다시 실행됩니다.
 
-There are two key advantages to doing this:
+ 이 기능의 주요 장점은 다음과 같습니다:
 
-- If you're in the middle of developing your pipeline, you can iterate more rapidly since you only have to run the process(es) you're actively working on in order to test your changes.
-- If you're running a pipeline in production and something goes wrong, in many cases you can fix the issue and relaunch the pipeline, and it will resume running from the point of failure, which can save you a lot of time and compute.
+ - 파이프라인을 개발 중일 때, 수정한 부분만 빠르게 테스트할 수 있습니다.
+ - 운영 환경에서 오류가 발생해도, 문제를 수정한 뒤 중단된 지점부터 이어서 실행할 수 있어 시간과 자원을 절약할 수 있습니다.
 
-To use it, simply add `-resume` to your command and run it:
+ 사용법은 매우 간단합니다. 명령어에 `-resume` 옵션을 추가하세요:
 
-```bash
-nextflow run hello-world.nf -resume
-```
+ ```bash
+ nextflow run hello-world.nf -resume
+ ```
 
-The console output should look similar.
+실행 결과는 아래와 비슷하게 나타납니다.
 
 ```console title="Output" linenums="1"
  N E X T F L O W   ~  version 25.04.3
@@ -402,46 +401,43 @@ Launching `hello-world.nf` [golden_cantor] DSL2 - revision: 35bd3425e5
 [62/49a1f8] sayHello | 1 of 1, cached: 1 ✔
 ```
 
-Look for the `cached:` bit that has been added in the process status line (line 5), which means that Nextflow has recognized that it has already done this work and simply re-used the result from the previous successful run.
+프로세스 상태 줄에(5번째 줄) `cached:`가 추가된 것을 확인할 수 있습니다. 이는 Nextflow가 이미 해당 작업을 완료했음을 인식하고, 이전 실행 결과를 그대로 재사용했다는 의미입니다.
 
-You can also see that the work subdirectory hash is the same as in the previous run.
-Nextflow is literally pointing you to the previous execution and saying "I already did that over there."
+또한 work 하위 디렉터리의 해시값도 이전 실행과 동일하게 유지됩니다. Nextflow가 "이 작업은 이미 저기서 했으니 다시 할 필요 없어!"라고 알려주는 셈입니다.
 
 !!! note
 
-    When your re-run a pipeline with `resume`, Nextflow does not overwrite any files written to a `publishDir` directory by any process call that was previously run successfully.
+    `-resume` 옵션으로 파이프라인을 재실행할 때, 이미 성공적으로 실행된 프로세스가 `publishDir`에 기록한 파일은 덮어쓰지 않습니다.
 
-### 3.3. Delete older work directories
+### 3.3. 오래된 work 디렉터리 정리하기
 
-During the development process, you'll typically run your draft pipelines a large number of times, which can lead to an accumulation of very many files across many subdirectories.
-Since the subdirectories are named randomly, it is difficult to tell from their names what are older vs. more recent runs.
+파이프라인을 여러 번 실행하다 보면 work 하위에 많은 디렉터리가 쌓이게 됩니다. 디렉터리 이름이 무작위 해시값이기 때문에, 어떤 것이 오래된 실행 결과인지 구분하기 어렵습니다.
 
-Nextflow includes a convenient `clean` subcommand that can automatically delete the work subdirectories for past runs that you no longer care about, with several [options](https://www.nextflow.io/docs/latest/reference/cli.html#clean) to control what will be deleted.
+Nextflow의 `clean` 서브커맨드를 사용하면, 더 이상 필요 없는 이전 실행 결과를 손쉽게 삭제할 수 있습니다. [공식 문서](https://www.nextflow.io/docs/latest/reference/cli.html#clean)에서 다양한 옵션을 확인할 수 있습니다.
 
-Here we show you an example that deletes all subdirectories from runs before a given run, specified using its run name.
-The run name is the machine-generated two-part string shown in square brackets in the `Launching (...)` console output line.
+아래는 특정 실행(run name) 이전의 모든 work 디렉터리를 삭제하는 예시입니다. run name은 실행 로그의 `Launching (...)` 줄에 대괄호로 표시된 두 단어 조합입니다.
 
-First we use the dry run flag `-n` to check what will be deleted given the command:
+먼저, `-n` 옵션으로 실제 삭제 전 어떤 디렉터리가 삭제될지 미리 확인합니다:
 
 ```bash
 nextflow clean -before golden_cantor -n
 ```
 
-The output should look like this:
+예상되는 출력 예시:
 
 ```console title="Output"
 Would remove /workspaces/training/hello-nextflow/work/a3/7be2fad5e71e5f49998f795677fd68
 ```
 
-If you don't see any lines output, you either did not provide a valid run name or there are no past runs to delete.
+만약 아무런 출력이 없다면, 올바른 run name을 입력하지 않았거나 삭제할 대상이 없는 경우입니다.
 
-If the output looks as expected and you want to proceed with the deletion, re-run the command with the `-f` flag instead of `-n`:
+출력 결과가 예상대로라면, 실제 삭제를 진행할 때는 `-f` 옵션을 사용합니다:
 
 ```bash
 nextflow clean -before golden_cantor -f
 ```
 
-You should now see the following:
+실제 삭제가 완료되면 아래와 같은 출력이 나타납니다:
 
 ```console title="Output"
 Removed /workspaces/training/hello-nextflow/work/a3/7be2fad5e71e5f49998f795677fd68
@@ -449,18 +445,18 @@ Removed /workspaces/training/hello-nextflow/work/a3/7be2fad5e71e5f49998f795677fd
 
 !!! Warning
 
-    Deleting work subdirectories from past runs removes them from Nextflow's cache and deletes any outputs that were stored in those directories.
-    That means it breaks Nextflow's ability to resume execution without re-running the corresponding processes.
+    과거 실행의 work 디렉터리를 삭제하면 Nextflow의 캐시가 사라지고, 해당 디렉터리에 저장된 출력 파일도 함께 삭제됩니다.
+    즉, 이후 resume 기능을 사용할 수 없게 됩니다.
 
-    You are responsible for saving any outputs that you care about or plan to rely on! If you're using the `publishDir` directive for that purpose, make sure to use the `copy` mode, not the `symlink` mode.
+    중요한 출력 파일이나 앞으로 활용할 결과는 반드시 직접 저장해 두어야 합니다! 만약 publishDir 지시문을 사용하는 경우, 반드시 copy 모드를 사용하고 symlink 모드는 피하세요.
 
-### Takeaway
+### 요약
 
-You know how to publish outputs to a specific directory, relaunch a pipeline without repeating steps that were already run in an identical way, and use the `nextflow clean` command to clean up old work directories.
+이제 결과 파일을 지정한 폴더에 저장하는 방법, 이미 실행한 단계를 반복하지 않고 파이프라인을 재실행하는 방법, 그리고 `nextflow clean` 명령어로 오래된 work 디렉터리를 정리하는 방법을 알게 되었습니다.
 
-### What's next?
+### 다음 단계는?
 
-Learn to provide a variable input via a command-line parameter and utilize default values effectively.
+명령줄 파라미터로 입력값을 전달하고, 기본값을 설정하는 방법을 배워봅시다.
 
 ---
 
